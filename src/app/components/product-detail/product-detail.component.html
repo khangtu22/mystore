@@ -1,0 +1,41 @@
+<mat-card class='product-card'>
+  <div class='image-container'>
+    <img [alt]='getCurrentProduct().name' [src]='getCurrentProduct().url' class='product-image'>
+  </div>
+  <div class='product-details'>
+    <div>
+      <h3 class='product-name flex-item'>{{ getCurrentProduct().name }}</h3>
+      <h3 class='product-description flex-item'>{{ getCurrentProduct().description}}</h3>
+    </div>
+    <p class='product-price flex-item'>{{ getCurrentProduct().price | currency}}</p>
+    <div class='quantity-input flex-item'>
+      <div class='quantity-controls quantity-adjust'>
+        <button (click)='decreaseQuantity(getCurrentProduct())' class='quantity-decrease'>
+          <mat-icon>remove</mat-icon>
+        </button>
+        <input (ngModelChange)='getCurrentProduct().quantity = $event || 1' [(ngModel)]='getCurrentProduct().quantity'
+               [defaultValue]='1'
+               class='no-spin'
+               id='quantity' min='1' type='number'>
+        <button (click)='increaseQuantity(getCurrentProduct())' class='quantity-increase quantity-adjust'>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <p class='product-total-price flex-item'>{{ getTotalPriceOfOneItem(getCurrentProduct()) | currency}}</p>
+  </div>
+</mat-card>
+<div class='flex-item'>
+  <mat-card-actions>
+    <button (click)='navigateToHome()' class='add-to-cart-button' color='white' mat-raised-button>
+      <mat-icon>arrow_back</mat-icon>
+      Back to product list
+    </button>
+  </mat-card-actions>
+  <mat-card-actions>
+    <button (click)='shareProduct(getCurrentProduct())' class='add-to-cart-button' color='primary' mat-raised-button>
+      <mat-icon>add_shopping_cart</mat-icon>
+      Add to Cart
+    </button>
+  </mat-card-actions>
+</div>

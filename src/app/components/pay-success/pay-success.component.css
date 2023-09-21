@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.success {
+    text-align: center;
+}
+
+.success h1 {
+    color: green;
+    font-size: 2.5rem;
+}
+
+.success img {
+    width: 50px;
+    height: 50px;
+}
+
+.success button {
+    margin-top: 20px;
+}

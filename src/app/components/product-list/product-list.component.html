@@ -1,0 +1,33 @@
+<div class='product-list'>
+  <div *ngFor='let product of products' class='product-item'>
+    <mat-card class='product-card'>
+      <div (click)='productDetail(product.id)' class='image-container'>
+        <img [alt]='product.name' [src]='product.url' class='product-image'>
+      </div>
+      <div class='product-details'>
+        <h3 class='product-name'>{{ product.name }}</h3>
+        <p class='product-price'>Price: {{ product.price }}</p>
+        <p class='product-description'>{{ product.description }}</p>
+        <div class='quantity-input'>
+          <div class='quantity-controls quantity-adjust'>
+            <button (click)='decreaseQuantity(product)' class='quantity-decrease'>
+              <mat-icon>remove</mat-icon>
+            </button>
+            <input (ngModelChange)='product.quantity = $event || 1' [(ngModel)]='product.quantity' [defaultValue]='1'
+                   class='no-spin'
+                   id='quantity' min='1' type='number'>
+            <button (click)='increaseQuantity(product)' class='quantity-increase quantity-adjust'>
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <mat-card-actions>
+        <button (click)='shareProduct(product)' class='add-to-cart-button' color='primary' mat-raised-button>
+          <mat-icon>add_shopping_cart</mat-icon>
+          Add to Cart
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

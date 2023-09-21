@@ -1,0 +1,76 @@
+<div class='grid-view'>
+  <!-- Content for the first part of the screen -->
+  <div class='checkout-container'>
+    <div *ngIf='!addedProducts.length'>
+      <mat-card class='product-card'>
+        Cart empty! <a routerLink="/"> Home</a>
+      </mat-card>
+    </div>
+    <div *ngFor='let product of addedProducts' class='product-item'>
+      <mat-card class='product-card'>
+        <div class='image-container' (click)='productDetail(product.id)'>
+          <img [alt]='product.name' [src]='product.url' class='product-image'>
+        </div>
+        <div class='product-details'>
+          <h3 class='product-name flex-item'>{{ product.name }}</h3>
+          <p class='product-price flex-item'>{{ product.price | currency}}</p>
+          <div class='quantity-input flex-item'>
+            <div class='quantity-controls quantity-adjust'>
+              <button (click)='decreaseQuantity(product)' class='quantity-decrease'>
+                <mat-icon>remove</mat-icon>
+              </button>
+              <input (ngModelChange)='product.quantity = $event || 1' [(ngModel)]='product.quantity' [defaultValue]='1'
+                     class='no-spin'
+                     id='quantity' min='1' type='number'>
+              <button (click)='increaseQuantity(product)' class='quantity-increase quantity-adjust'>
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+          <p class='product-total-price flex-item'>{{ getTotalPriceOfOneItem(product) | currency}}</p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <!-- Content for the second part of the screen -->
+  <div class='form-container'>
+    <h2>Checkout Form</h2>
+    <form (ngSubmit)='submitForm()' [formGroup]='checkoutForm'>
+      <div class='form-container'>
+        <mat-form-field class='form-field'>
+          <mat-label>Full Name</mat-label>
+          <input formControlName='fullName' matInput minlength='3' required class='wide-input'>
+          <mat-error *ngIf='fullName.invalid && (fullName.dirty || fullName.touched)'>
+            Full Name is required and must be at least 3 characters long.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class='form-field'>
+          <mat-label>Address</mat-label>
+          <textarea formControlName='address' matInput minlength='6' required></textarea>
+          <mat-error *ngIf='address.invalid && (address.dirty || address.touched)'>
+            Address is required and must be at least 6 characters long.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class='form-field'>
+          <mat-label>Credit Card Number</mat-label>
+          <input formControlName='creditCardNumber' matInput pattern='[0-9]{16}' required>
+          <mat-error *ngIf='creditCardNumber.invalid && (creditCardNumber.dirty || creditCardNumber.touched)'>
+            Credit Card Number is required and must be a 16-digit number.
+          </mat-error>
+        </mat-form-field>
+        <div class='small-text'>
+          We'll never share your payment details with anyone else.
+        </div>
+      </div>
+      <div class='total-price-summary'>
+        <p class='product-price-text-total'>Total: </p>
+        <p class='product-price-summary'>{{ getTotalPrice(addedProducts) | currency}}</p>
+      </div>
+      <div class='flex-item'>
+        <button [disabled]='checkoutForm.invalid' class='submit-button' color='primary' mat-raised-button type='submit'>
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

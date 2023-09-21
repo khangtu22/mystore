@@ -1,0 +1,11 @@
+<mat-toolbar color='primary'>
+  <div (click)='redirectToHome()' class='logo'>
+    <span class='logo-text'>MyStore</span>
+  </div>
+  <div class='spacer'></div>
+  <button (click)='redirectToHome()' mat-button>Product List</button>
+  <button (click)='redirectToCart()' mat-icon-button>
+    <mat-icon>shopping_cart</mat-icon>
+    <div class='cart-badge'>{{ addedProducts.length }}</div>
+  </button>
+</mat-toolbar>
