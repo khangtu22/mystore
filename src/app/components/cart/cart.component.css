@@ -231,3 +231,8 @@
 .submit-button {
     align-content: end;
 }
+
+.icon-remove{
+  padding: 0 50px;
+  cursor: pointer;
+}

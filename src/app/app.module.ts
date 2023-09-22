@@ -22,6 +22,12 @@ import { PaySuccessComponent } from './components/pay-success/pay-success.compon
 import { ProductService } from './services/product.service';
 import { DataService } from './services/data.service';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { AddToCartComponent } from './utils/add-to-cart/add-to-cart.component';
+import { CardModule } from 'primeng/card';
+import { SingleProductComponent } from './utils/single-product/single-product.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +38,8 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
     ProductListComponent,
     PaySuccessComponent,
     ProductDetailComponent,
+    AddToCartComponent,
+    SingleProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,8 +57,11 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
     ReactiveFormsModule,
     MatInputModule,
     MatGridListModule,
+    ButtonModule,
+    ToastModule,
+    CardModule,
   ],
-  providers: [ProductService, DataService],
+  providers: [ProductService, MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {

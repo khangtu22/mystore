@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/interfaces/product.model';
-import { DataService } from '../../services/data.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ProductSharingService } from '../../services/product-sharing.service';
 
 @Component({
   selector: 'app-cart',
@@ -23,14 +23,14 @@ export class CartComponent implements OnInit {
     creditCardNumber: this.creditCardNumber,
   });
 
-  constructor(private dataService: DataService,
+  constructor(private productSharingService: ProductSharingService,
               private router: Router,
-              private snackBar: MatSnackBar,
+              private messageService: MessageService,
   ) {
   }
 
   ngOnInit() {
-    this.addedProducts = this.dataService.getCartData();
+    this.addedProducts = this.productSharingService.getCartData();
   }
 
   decreaseQuantity(item: Product) {
@@ -38,7 +38,6 @@ export class CartComponent implements OnInit {
       item.quantity--;
     } else {
       this.removeProduct(item.id);
-      this.openSnackBar(item.name + ' was removed form cart!', 'Dismiss');
     }
   }
 
@@ -46,12 +45,18 @@ export class CartComponent implements OnInit {
     this.addedProducts = this.addedProducts.filter(product => {
       return product.id !== productId;
     });
-    this.dataService.removeProduct(productId);
-
+    this.productSharingService.removeProduct(productId);
+    this.showToast();
   }
 
   increaseQuantity(item: any) {
     item.quantity++;
+  }
+
+  onRemoveItemFromCart(product: Product){
+    if (product){
+      this.removeProduct(product.id);
+    }
   }
 
   getTotalPrice(products: Product[]): number {
@@ -66,11 +71,11 @@ export class CartComponent implements OnInit {
     this.router.navigate(['/checkout/success']).then();
   }
 
-  openSnackBar(message: string, action?: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top',
-      panelClass: 'removed-to-cart-snackbar',
+  showToast() {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Success',
+      detail: 'Item was removed from cart successfully!',
     });
   }
 

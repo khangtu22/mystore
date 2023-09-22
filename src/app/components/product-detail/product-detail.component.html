@@ -32,10 +32,6 @@
       Back to product list
     </button>
   </mat-card-actions>
-  <mat-card-actions>
-    <button (click)='shareProduct(getCurrentProduct())' class='add-to-cart-button' color='primary' mat-raised-button>
-      <mat-icon>add_shopping_cart</mat-icon>
-      Add to Cart
-    </button>
-  </mat-card-actions>
+  <app-add-to-cart (addToCartEvent)='shareProduct(getCurrentProduct())'></app-add-to-cart>
+  <p-toast></p-toast>
 </div>

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Product } from '../../models/interfaces/product.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from '../../services/data.service';
-import { Router } from '@angular/router';
+import { ProductService } from '../../services/product.service';
+import { MessageService } from 'primeng/api';
+import { ProductSharingService } from '../../services/product-sharing.service';
 
 @Component({
   selector: 'app-product-list',
@@ -14,46 +13,32 @@ import { Router } from '@angular/router';
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
 
-  constructor(private http: HttpClient,
-              private snackBar: MatSnackBar,
-              private dataService: DataService,
-              private router: Router,
+  constructor(private dataService: DataService,
+              private productService: ProductService,
+              private messageService: MessageService,
+              private productSharingService: ProductSharingService,
   ) {
   }
 
   ngOnInit(): void {
-    this.getData().subscribe((data: Product[]) => {
-      this.products = data.map((product) => {
+    this.productService.getProductList().subscribe((data: Product[]) => {
+      const existingProduct = data.map((product) => {
         return { ...product, quantity: 1 };
       });
+      this.products = [...existingProduct];
     });
   }
 
-  getData(): Observable<Product[]> {
-    return this.http.get<Product[]>('./assets/data.json');
-  }
-
-  productDetail(productId: number) {
-    this.router.navigate([`details/` + productId]).then();
+  showToast() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Item added to cart successfully!' });
   }
 
   shareProduct(product: Product) {
     if (product) {
-      this.dataService.setCartData(product);
-      this.onAdded();
+      // this.dataService.setCartData(product);
+      this.productSharingService.addProduct(product);
+      this.showToast();
     }
-  }
-
-  openSnackBar(message: string, action?: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top',
-      panelClass: 'added-to-cart-snackbar',
-    });
-  }
-
-  onAdded() {
-    this.openSnackBar('Item added to cart successfully!', 'Dismiss');
   }
 
   decreaseQuantity(product: Product) {
@@ -65,4 +50,5 @@ export class ProductListComponent implements OnInit {
   increaseQuantity(product: Product) {
     product.quantity += 1;
   }
+
 }

@@ -7,12 +7,20 @@ import { Injectable } from '@angular/core';
 export class DataService {
   private cartData: Product[] = [];
 
-  getCartData() {
+  getCartData(): Product[] {
     return this.cartData;
   }
 
+  getCartDataLength(): number {
+    return this.cartData.length;
+  }
+
   setCartData(product: Product) {
-    if (product){
+    const foundProduct = this.cartData.find(item => item.id === product.id);
+
+    if (foundProduct){
+      foundProduct.quantity += 1;
+    } else {
       this.cartData.push(product);
     }
   }

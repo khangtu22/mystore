@@ -1,10 +1,13 @@
 <div class='grid-view'>
   <!-- Content for the first part of the screen -->
   <div class='checkout-container'>
-    <div *ngIf='!addedProducts.length'>
-      <mat-card class='product-card'>
-        Cart empty! <a routerLink="/"> Home</a>
-      </mat-card>
+    <div *ngIf="!addedProducts.length" class="p-d-flex p-justify-center p-align-center cart-empty">
+      <div class="product-card">
+        <div class="p-card-title">Cart empty!</div>
+        <div class="p-card-subtitle">
+          <a routerLink="/">Home</a>
+        </div>
+      </div>
     </div>
     <div *ngFor='let product of addedProducts' class='product-item'>
       <mat-card class='product-card'>
@@ -28,6 +31,9 @@
             </div>
           </div>
           <p class='product-total-price flex-item'>{{ getTotalPriceOfOneItem(product) | currency}}</p>
+          <div>
+            <mat-icon (click)='onRemoveItemFromCart(product)' class='icon-remove'>delete</mat-icon>
+          </div>
         </div>
       </mat-card>
     </div>
@@ -70,6 +76,7 @@
         <button [disabled]='checkoutForm.invalid' class='submit-button' color='primary' mat-raised-button type='submit'>
           Submit
         </button>
+        <p-toast></p-toast>
       </div>
     </form>
   </div>

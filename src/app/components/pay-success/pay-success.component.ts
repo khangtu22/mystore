@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../services/data.service';
 import { Product } from '../../models/interfaces/product.model';
 import { ProductService } from '../../services/product.service';
 import { Router } from '@angular/router';
+import { ProductSharingService } from '../../services/product-sharing.service';
 
 @Component({
   selector: 'app-pay-success',
@@ -13,13 +13,13 @@ export class PaySuccessComponent implements OnInit {
   addedProducts: Product[] = [];
 
   constructor(
-    private dataService: DataService,
+    private productSharingService: ProductSharingService,
     private router: Router,
     private productService: ProductService) {
   }
 
   ngOnInit() {
-    this.addedProducts = this.dataService.getCartData();
+    this.addedProducts = this.productSharingService.getCartData();
   }
 
   getTotalPrice() {

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/interfaces/product.model';
-import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DataService } from '../../services/data.service';
+import { ProductService } from '../../services/product.service';
+import { MessageService } from 'primeng/api';
+import { ProductSharingService } from '../../services/product-sharing.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,16 +17,16 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private http: HttpClient,
-              private dataService: DataService,
-              private snackBar: MatSnackBar) {
+              private productSharingService: ProductSharingService,
+              private productService: ProductService,
+              private messageService: MessageService,) {
     this.route.params.subscribe(params => {
       this.id = params['id'];
     });
   }
 
   ngOnInit(): void {
-    this.getData().subscribe((data: Product[]) => {
+    this.productService.getProductList().subscribe((data: Product[]) => {
       this.products = data.map((product) => {
         if (product.id == this.id) {
           this.currentProduct = product;
@@ -47,20 +46,8 @@ export class ProductDetailComponent implements OnInit {
     return product.price * product.quantity;
   }
 
-  openSnackBar(message: string, action?: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top',
-      panelClass: 'removed-to-cart-snackbar',
-    });
-  }
-
   increaseQuantity(item: any) {
     item.quantity++;
-  }
-
-  getData(): Observable<Product[]> {
-    return this.http.get<Product[]>('./assets/data.json');
   }
 
   getCurrentProduct(): Product {
@@ -69,13 +56,13 @@ export class ProductDetailComponent implements OnInit {
 
   shareProduct(product: Product) {
     if (product) {
-      this.dataService.setCartData(product);
-      this.onAddedMessageSuccess();
+      this.productSharingService.addProduct(product);
+      this.showToast();
     }
   }
 
-  onAddedMessageSuccess() {
-    this.openSnackBar('Item added to cart successfully!', 'Dismiss');
+  showToast() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Item added to cart successfully!' });
   }
 
   navigateToHome() {

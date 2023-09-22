@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '../../../models/interfaces/product.model';
 import { Router } from '@angular/router';
-import { DataService } from '../../../services/data.service';
+import { ProductSharingService } from '../../../services/product-sharing.service';
 
 @Component({
   selector: 'app-header',
@@ -9,16 +9,18 @@ import { DataService } from '../../../services/data.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  @Input()
+  appName: string = "MyStore";
   addedProducts: Product[] = [];
 
   constructor(
     private router: Router,
-    private dataService: DataService,
+    private productSharingService: ProductSharingService,
   ) {
   }
 
   ngOnInit() {
-    this.addedProducts = this.dataService.getCartData();
+    this.addedProducts = this.productSharingService.getCartData();
   }
 
   redirectToCart() {
